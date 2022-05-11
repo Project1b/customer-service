@@ -1,7 +1,5 @@
 package pe.com.bank.customer.service;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +9,6 @@ import lombok.AllArgsConstructor;
 import pe.com.bank.customer.client.AccountRestClient;
 import pe.com.bank.customer.dto.CustomerAccountDTO;
 import pe.com.bank.customer.entity.Customer;
-import pe.com.bank.customer.entity.Person;
 import pe.com.bank.customer.repository.CustomerRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -64,6 +61,7 @@ public class CustomerServiceImpl implements CustomerService{
 				new CustomerAccountDTO(customer.getId(),customer.getCustomerType(),customer.getDateAssociated(),a));									
 				});
 
+			//test   
 				
 	// return customerAccountDTO;
 }
