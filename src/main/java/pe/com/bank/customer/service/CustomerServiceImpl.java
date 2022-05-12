@@ -23,22 +23,22 @@ public class CustomerServiceImpl implements CustomerService{
 	    private static final Logger log = LoggerFactory.getLogger(CustomerServiceImpl.class);
 
 	    public Mono<Customer> addCustomer(Customer customer){
-	    	log.info("addPerson");    	
-	    	return customerRepository.save(customer).doOnNext(customerSaved -> log.info("Person id :"+customer.getId()+" Saved"));
+	    	log.info("addCustomer");    	
+	    	return customerRepository.save(customer).doOnNext(customerSaved -> log.info("Customer id :"+customer.getId()+" Saved"));
 	    }
 	    
 	    public Flux<Customer> getCustomers(){
 	    	log.info("getCustomers");  
-	       return customerRepository.findAll().doOnNext(customer -> log.info("Person id :"+customer.getId()));
+	       return customerRepository.findAll().doOnNext(customer -> log.info("Customer id :"+customer.getId()));
 	    }
 	    
 	    public Mono<Customer> getCustomerById(String id){
 	    	log.info("getCustomerById");  
-	    	return customerRepository.findById(id).doOnNext(customer -> log.info("Person id :"+customer.getId()));
+	    	return customerRepository.findById(id).doOnNext(customer -> log.info("Customer id :"+customer.getId()));
 	    }
 	    
 	    public Mono<Customer> updateCustomer(Customer customerUpdate, String id){
-	    	log.info("updatePerson"); 
+	    	log.info("updateCustomer"); 
 	    	return customerRepository.findById(id).flatMap(customer -> {
 	    			
 	    		customer.setCustomerType(customerUpdate.getCustomerType() != null ? customerUpdate.getCustomerType():customer.getCustomerType());
@@ -46,11 +46,11 @@ public class CustomerServiceImpl implements CustomerService{
 	    			    		
 	    		return customerRepository.save(customer);
 	 
-	    	}).doOnNext(person -> log.info("Person id :"+person.getId()+" Updated"));
+	    	}).doOnNext(person -> log.info("Customer id :"+person.getId()+" Updated"));
 	    }
 	    
 	    public Mono<Void> deleteCustomerById(String id){
-	    	log.info("deletePersonById"); 
+	    	log.info("deleteCustomerById"); 
 	    	return customerRepository.deleteById(id);
 	    }
 
@@ -61,7 +61,7 @@ public class CustomerServiceImpl implements CustomerService{
 				new CustomerAccountDTO(customer.getId(),customer.getCustomerType(),customer.getDateAssociated(),a));									
 				});
 
-			//test   
+			//test 
 				
 	// return customerAccountDTO;
 }
