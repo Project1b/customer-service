@@ -23,13 +23,11 @@ public class AccountRestClient {
 	  
 	  public Flux<Account> getAccountByCustomerId(String customerId){
 		  
-		  var url = UriComponentsBuilder.fromHttpUrl(accountUrl)
-	                .queryParam("customerId", customerId)
-	                .buildAndExpand().toUriString();
+		  var url = accountUrl.concat("/{id}");
 		  
 		  return  webClient
 	                .get()
-	                .uri(url)
+	                .uri(url,customerId)
 	                .retrieve()
 	                .bodyToFlux(Account.class)
 	                .log();

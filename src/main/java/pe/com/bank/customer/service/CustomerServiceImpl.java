@@ -61,9 +61,7 @@ public class CustomerServiceImpl implements CustomerService{
 				new CustomerAccountDTO(customer.getId(),customer.getCustomerType(),customer.getDateAssociated(),a));									
 				});
 
-			//test 
 				
-	// return customerAccountDTO;
 }
 		
 		
