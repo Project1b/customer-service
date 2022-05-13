@@ -3,6 +3,9 @@ package pe.com.bank.customer.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +25,6 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 @RefreshScope
 @RestController
-@RequestMapping("/v1")
 public class CustomerController {
 
 	
@@ -30,35 +32,39 @@ public class CustomerController {
 	    
 	    private static final Logger log = LoggerFactory.getLogger(CustomerController.class);
 	    
-	    @PostMapping("/customers")
+	    @PostMapping
 	    public Mono<Customer> addCustomer(@RequestBody Customer customer){
 	    	log.info("addCustomer");
 	    	return customerService.addCustomer(customer);
 	    }
 	    
-	    @GetMapping("/customers")
-	    public Flux<Customer> getCustomers() {
+	    @GetMapping
+	    public ResponseEntity<Mono<Flux<Customer>>> getCustomers() {
 	    	log.info("getCustomers");
-	        return customerService.getCustomers();
+	    	
+	    	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(null);
+	       // return customerService.getCustomers();
 	    }
 	    
-	    @GetMapping("/customers/{id}")
+	    @GetMapping("/{id}")
 	    public Mono<Customer> getCustomerById(@PathVariable String id){
 	    	log.info("getCustomerById");
 	    	return customerService.getCustomerById(id);
 	    }
 	    
-	    @PutMapping("/customers/{id}")
+	    @PutMapping("/{id}")
 	    public Mono<Customer> updateCustomer(@RequestBody Customer customerUpdate, @PathVariable String id){
 	    	return customerService.updateCustomer(customerUpdate, id);
 	    }
 	    	    
-	    @DeleteMapping("/customers/{id}")
+	    @DeleteMapping("/{id}")
 	    public Mono<Void> deleteCustomerById(@PathVariable String id){
 	    	return customerService.deleteCustomerById(id);
 	    }
 	    
-	    @GetMapping("/customers/accounts/{id}")
+	    @GetMapping("/accounts/{id}")
 	    public Mono<CustomerAccountDTO> getCustomerAccountByCustomer(@PathVariable String id){
 	    	return customerService.getCustomerAccountByCustomerId(id);
 	    }
