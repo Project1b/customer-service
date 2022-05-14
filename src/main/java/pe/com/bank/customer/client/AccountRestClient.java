@@ -20,12 +20,8 @@ public class AccountRestClient {
 	  @Value("${restClient.accountUrl}")
 	  private String accountUrl;
 	  
-	// @Value("${restClient.accountUrl}")
-		 // private String clientServerName;
-	  
 	  
 	  public Flux<Account> getAccountByCustomerId(String customerId){
-		 // accountUrl ="http://account-service/v1/accounts/6275a7aab557542205eb1c1d";
 		  var url = accountUrl.concat("/{id}");
 		  
 		  return  webClient
