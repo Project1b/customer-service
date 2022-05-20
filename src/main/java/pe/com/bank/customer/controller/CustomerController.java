@@ -1,5 +1,7 @@
 package pe.com.bank.customer.controller;
 
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -35,8 +37,9 @@ public class CustomerController {
 	    }
 	    
 	    @GetMapping
-	    public Flux<Customer> getCustomers() {
+	    public Flux<Customer> getCustomers() throws InterruptedException {
 	    	log.info("getCustomers");
+	    	TimeUnit.SECONDS.sleep(5L);
 	        return customerService.getCustomers();
 	    }
 	    

@@ -43,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService{
 	    			
 	    		customer.setCustomerType(customerUpdate.getCustomerType() != null ? customerUpdate.getCustomerType():customer.getCustomerType());
 	    		customer.setDateAssociated(customerUpdate.getDateAssociated()!= null ? customerUpdate.getDateAssociated():customer.getDateAssociated());
-	    			    		
+ 		
 	    		return customerRepository.save(customer);
 	 
 	    	}).doOnNext(person -> log.info("Customer id :"+person.getId()+" Updated"));
@@ -63,6 +63,7 @@ public class CustomerServiceImpl implements CustomerService{
 
 				
 }
+		
 		
 		
 }

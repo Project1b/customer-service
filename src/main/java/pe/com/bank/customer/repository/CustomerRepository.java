@@ -7,6 +7,7 @@ import pe.com.bank.customer.entity.Customer;
 
 @Repository
 public interface CustomerRepository  extends ReactiveMongoRepository<Customer,String>{
+
 	
 	
 	

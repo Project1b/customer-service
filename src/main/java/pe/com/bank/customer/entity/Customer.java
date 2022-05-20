@@ -14,7 +14,8 @@ public class Customer {
 	
 	@Id
 	private String id;
-	private String customerType;
-	private String dateAssociated;	
+	private String customerType;	
+	private String dateAssociated;
+	private String category;
 
 }
