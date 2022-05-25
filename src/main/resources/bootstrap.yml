@@ -5,7 +5,7 @@ spring:
     active: dev
   cloud:
     config:
-      uri: https://bootcamp-nttdata-config-server.azurewebsites.net/
+      uri: https://bootcamp-nttdata-config-server.azurewebsites.net
   
 management:
   endpoints:
