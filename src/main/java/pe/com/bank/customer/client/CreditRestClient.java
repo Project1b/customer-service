@@ -4,46 +4,52 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import pe.com.bank.customer.client.entity.AccountEntity;
+import pe.com.bank.customer.client.entity.CreditEntity;
 import reactor.core.publisher.Flux;
 
+
+
 @Component
-public class AccountRestClient {
+public class CreditRestClient {
+	
 	
 	private WebClient webClient;		
 	  
-	  public AccountRestClient(WebClient webClient) {
+	  public CreditRestClient(WebClient webClient) {
 	        this.webClient = webClient;
 	    }
 	  
 	  
-	  @Value("${restClient.accountUrl}")
-	  private String accountUrl;
+	  @Value("${restClient.creditUrl}")
+	  private String creditUrl;
 	  
-
-	  public Flux<AccountEntity> getAccountByCustomerId(String customerId){
-		  var url = accountUrl.concat("/customer/{id}");
+	  
+	  
+	  
+	  public Flux<CreditEntity> getCreditByCustomerId(String customerId){
+		  var url = creditUrl.concat("/v1/credits/customerId/{customerId}");
 		  
 		  return  webClient
 	                .get()
 	                .uri(url,customerId)
 	                .retrieve()
-	                .bodyToFlux(AccountEntity.class)
+	                .bodyToFlux(CreditEntity.class)
 	                .log();
 
 	  }
 	  
-	  public Flux<AccountEntity> getAccountByCustomerIdAndProductId(String customerId,String productId){
-		  var url = accountUrl.concat("/customerId/{customerId}/productId/{productId}");
+	  
+	  public Flux<CreditEntity> getAccountByCustomerIdAndProductId(String customerId,String productId){
+		  var url = creditUrl.concat("/v1/credits/customerId/{customerId}/productId/{productId}");
 		  
 		  return  webClient
 	                .get()
 	                .uri(url,customerId,productId)
 	                .retrieve()
-	                .bodyToFlux(AccountEntity.class)
+	                .bodyToFlux(CreditEntity.class)
 	                .log();
 
 	  }
-	  
-	  
+	
+
 }

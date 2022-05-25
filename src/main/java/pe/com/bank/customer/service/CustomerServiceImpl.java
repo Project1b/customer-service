@@ -7,7 +7,12 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import pe.com.bank.customer.client.AccountRestClient;
+import pe.com.bank.customer.client.CreditRestClient;
+import pe.com.bank.customer.client.TransactionRestClient;
+import pe.com.bank.customer.dto.AccountInfo;
+import pe.com.bank.customer.dto.CreditInfo;
 import pe.com.bank.customer.dto.CustomerAccountDTO;
+import pe.com.bank.customer.dto.CustomerSummaryDTO;
 import pe.com.bank.customer.entity.Customer;
 import pe.com.bank.customer.repository.CustomerRepository;
 import reactor.core.publisher.Flux;
@@ -18,6 +23,8 @@ import reactor.core.publisher.Mono;
 public class CustomerServiceImpl implements CustomerService{
 	
 	    AccountRestClient  accountRestClient;
+	    CreditRestClient  creditRestClient;
+	    TransactionRestClient  transactionRestClient;
 	    CustomerRepository customerRepository;
 	    
 	    private static final Logger log = LoggerFactory.getLogger(CustomerServiceImpl.class);
@@ -62,7 +69,42 @@ public class CustomerServiceImpl implements CustomerService{
 				});
 
 				
-}
+		}
+		
+		public Mono<CustomerSummaryDTO> getCustomerSummary(String customerId){
+			
+		var accounts = 	accountRestClient.getAccountByCustomerId(customerId).flatMap( account -> {
+			
+			 var transactions = transactionRestClient.getTrasanctionByAccountId(account.getId()).collectList();
+			  
+			return transactions.map( t -> new AccountInfo(account.getId(),account.getAccountNumber(),account.getAmount(),
+					account.getDateOpen(),account.getAmounttype(),account.getProductId(),t));
+		}).collectList();
+		
+		
+		var credits = 	creditRestClient.getCreditByCustomerId(customerId).flatMap( credit -> {
+			
+			 var transactions = transactionRestClient.getTrasanctionByAccountId(credit.getCreditId()).collectList();
+			  
+			return transactions.map(t -> new CreditInfo(credit.getCreditId(),credit.getAmountUsed(),credit.getLimitCredit(),
+					credit.getCreditAvailable(),credit.getNumberCredit(),credit.getType(),credit.getProductId(),t));
+		}).collectList();
+		
+		
+		var loans = 	creditRestClient.getCreditByCustomerId(customerId).flatMap( credit -> {
+			
+			 var transactions = transactionRestClient.getTrasanctionByAccountId(credit.getCreditId()).collectList();
+			  
+			return transactions.map(t -> new CreditInfo(credit.getCreditId(),credit.getAmountUsed(),credit.getLimitCredit(),
+					credit.getCreditAvailable(),credit.getNumberCredit(),credit.getType(),credit.getProductId(),t));
+		}).collectList();
+		
+			
+			return accounts.flatMap( a -> {
+				return credits.map( c -> new CustomerSummaryDTO(customerId,a,c));
+			});
+			
+		}
 		
 		
 		

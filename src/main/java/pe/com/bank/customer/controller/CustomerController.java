@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
 import pe.com.bank.customer.dto.CustomerAccountDTO;
+import pe.com.bank.customer.dto.CustomerSummaryDTO;
 import pe.com.bank.customer.entity.Customer;
 import pe.com.bank.customer.service.CustomerService;
 import reactor.core.publisher.Flux;
@@ -64,5 +65,9 @@ public class CustomerController {
 	    	return customerService.getCustomerAccountByCustomerId(id);
 	    }
 	    
+	    @GetMapping("/customerSummary/{customerId}")
+	    public Mono<CustomerSummaryDTO> getCustomerSummary(@PathVariable String customerId){
+	    	return customerService.getCustomerSummary(customerId);
+	    }	    
 	
 }
