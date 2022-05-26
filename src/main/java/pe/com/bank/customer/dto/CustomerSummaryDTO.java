@@ -13,7 +13,8 @@ public class CustomerSummaryDTO {
 	
 	private String customerId;
 	private List<AccountInfo> accountList;
-	private List<CreditInfo> creditList;	
+	private List<CreditInfo> creditList;
+	private List<LoanInfo> loanList;	
 	
 
 }

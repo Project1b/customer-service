@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import lombok.AllArgsConstructor;
 import pe.com.bank.customer.client.AccountRestClient;
 import pe.com.bank.customer.client.CreditRestClient;
+import pe.com.bank.customer.client.LoanRestClient;
 import pe.com.bank.customer.client.TransactionRestClient;
 import pe.com.bank.customer.dto.AccountInfo;
 import pe.com.bank.customer.dto.CreditInfo;
 import pe.com.bank.customer.dto.CustomerAccountDTO;
 import pe.com.bank.customer.dto.CustomerSummaryDTO;
+import pe.com.bank.customer.dto.LoanInfo;
 import pe.com.bank.customer.entity.Customer;
 import pe.com.bank.customer.repository.CustomerRepository;
 import reactor.core.publisher.Flux;
@@ -24,6 +26,7 @@ public class CustomerServiceImpl implements CustomerService{
 	
 	    AccountRestClient  accountRestClient;
 	    CreditRestClient  creditRestClient;
+	    LoanRestClient    loanRestClient;
 	    TransactionRestClient  transactionRestClient;
 	    CustomerRepository customerRepository;
 	    
@@ -84,24 +87,26 @@ public class CustomerServiceImpl implements CustomerService{
 		
 		var credits = 	creditRestClient.getCreditByCustomerId(customerId).flatMap( credit -> {
 			
-			 var transactions = transactionRestClient.getTrasanctionByAccountId(credit.getCreditId()).collectList();
+			 var transactions = transactionRestClient.getTrasanctionByCredittId(credit.getCreditId()).collectList();
 			  
 			return transactions.map(t -> new CreditInfo(credit.getCreditId(),credit.getAmountUsed(),credit.getLimitCredit(),
 					credit.getCreditAvailable(),credit.getNumberCredit(),credit.getType(),credit.getProductId(),t));
 		}).collectList();
 		
-		
-		var loans = 	creditRestClient.getCreditByCustomerId(customerId).flatMap( credit -> {
+		loanRestClient.getLoanByCustomerId(customerId);
+		var loans = 	loanRestClient.getLoanByCustomerId(customerId).flatMap( loan -> {
 			
-			 var transactions = transactionRestClient.getTrasanctionByAccountId(credit.getCreditId()).collectList();
+			 var transactions = transactionRestClient.getTrasanctionByAccountId(loan.getLoanId()).collectList();
 			  
-			return transactions.map(t -> new CreditInfo(credit.getCreditId(),credit.getAmountUsed(),credit.getLimitCredit(),
-					credit.getCreditAvailable(),credit.getNumberCredit(),credit.getType(),credit.getProductId(),t));
+			return transactions.map(t -> new LoanInfo(loan.getLoanId(),loan.getDebt(),loan.getPaymentDate(),loan.getEndDate(),
+					loan.getQuota(),loan.getDebtStatus(),loan.getPendingQuota(),loan.getProductId(),t));
 		}).collectList();
 		
 			
 			return accounts.flatMap( a -> {
-				return credits.map( c -> new CustomerSummaryDTO(customerId,a,c));
+				return credits.flatMap( c -> {
+					return loans.map(  l -> new CustomerSummaryDTO(customerId,a,c,l));
+				});
 			});
 			
 		}
